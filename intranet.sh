@@ -10,11 +10,11 @@ sudo apt-get update
 sudo apt-get install nginx
 
 # Install MariaDB
-sudo apt-get install mariadb-server # Or MySQL: sudo apt-get install mysql-server
-sudo service mysql stop # Stop the MySQL if is running.
-sudo mysql_install_db
-sudo service mysql start
-sudo mysql_secure_installation
+sudo apt-get install software-properties-common
+sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.nodesdirect.com/mariadb/repo/10.4/ubuntu bionic main'
+sudo apt update
+sudo apt install mariadb-server
 
 # Install PHP 7.2
 sudo add-apt-repository ppa:ondrej/php
