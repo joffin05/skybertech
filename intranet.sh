@@ -1,28 +1,181 @@
-# Install Nginx
+#------- Heading ------#
+
+#!/bin/bash
+#
+# Setup server block in Nginx
+#
+# GitHub:   https://github.com/riyas-rawther/intranet_apps_lemp
+# Author:   Riyas Rawther
+# URL:      https://github.com/riyas-rawther/
+#
+
+# Styling
+bold=$(tput bold)
+normal=$(tput sgr0)
+fontwhite="\033[1;37m"
+fontgreen="\033[0;32m"
+
+# App details
+DIRECTORY=
+DOMAIN=
+IP= hostname -I
+
+echo
+echo -e "****************************************************************"
+echo -e "*"
+echo -e "* Setting up Nginx Server Block:"
+echo -e "*   Domain: ${fontgreen}${bold}${DOMAIN}${normal}"
+echo -e "*   Directory: ${fontgreen}${bold}${DIRECTORY}${normal}"
+echo -e "*"
+echo -e "****************************************************************"
+echo
+
+# Confirm setup
+read -p "${bold}Do you want to Proceed? [y/N]${normal} " -n 1 -r
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+  echo
+  echo -e "Exiting..."
+  echo
+  echo
+  exit 1
+fi
+
+### SETTINGS ->
+#KEY="ssh-rsa ABC123== you@email.com"	# Please, place below your public key!
+TIMEZONE="Asia/Kolkata"				# Change to your timezone
+### <- SETTINGS
+
+# Fix environment
+echo 'LC_ALL="en_US.UTF-8"' >> /etc/environment
+
+# Install security updates automatically
+echo -e "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\nUnattended-Upgrade::Automatic-Reboot \"false\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
+/etc/init.d/unattended-upgrades restart
+
+# Setup simple Firewall
+ufw allow 22 #OpenSSH
+ufw allow 80 #http
+ufw allow 81 #http
+ufw allow 82 #http
+ufw allow 83 #http
+ufw allow 84 #http
+ufw allow 85 #http
+ufw allow 443 #https
+yes | ufw enable
+
+# Check Firewall settings
+ufw status
+
+# See disk space
+df -h
+#------- Heading END ------#
+
+
+
+
+echo "Adding all repositories"
+echo "NGINX repository adding"
+
 sudo bash -c 'cat > /etc/apt/sources.list.d/nginx.list << EOL
 deb http://nginx.org/packages/ubuntu/ xenial nginx
 deb-src http://nginx.org/packages/ubuntu/ xenial nginx
 EOL'
+echo "NGINX repository added"
 
-wget http://nginx.org/keys/nginx_signing.key
-sudo apt-key add nginx_signing.key
-sudo apt-get update
-sudo apt-get install nginx
+echo "Adding Php 7.2 repository"
 
-# Install MariaDB
+sudo add-apt-repository ppa:ondrej/php
+
+echo "Adding Php 7.2 repository added"
+
+echo "Adding Mariadb repository"
+
 sudo apt-get install software-properties-common
 sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
 sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.nodesdirect.com/mariadb/repo/10.4/ubuntu bionic main'
-sudo apt update
+
+echo "added Mariadb repository"
+
+echo "Updating Linux"
+sudo apt-get update
+
+echo "Installing  Nginx"
+
+wget http://nginx.org/keys/nginx_signing.key
+sudo apt-key add nginx_signing.key
+sudo apt-get install nginx
+echo "Installed  Nginx"
+
+echo "Install MariaDB"
+
 sudo apt install mariadb-server
 
-# Install PHP 7.2
-sudo add-apt-repository ppa:ondrej/php
-sudo apt-get update
+echo "Install PHP 7.2"
+
 sudo apt-get install php7.2
 
-# Install needed modules for PHP
-sudo apt-get install php7.2-fpm php7.2-mysql php7.2-curl php7.2-gd php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip
+echo "Install needed modules for PHP"
+sudo apt-get install php7.2-fpm php7.2-json php7.2-opcache php7.2-readline php7.2-mysql php7.2-curl php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip php7.2-gd php7.2-sqlite
+apt install php-{xmlrpc,soap,bcmath,cli,xml,tokenizer,ldap,imap,util,intl,apcu,gettext} openssl
+echo "Done Installing needed modules for PHP"
+
+echo "Installing other required modules"
+
+sudo apt-get install poppler-utils catdoc
+
+echo "Setting timezone to India"
+timedatectl set-timezone Asia/Kolkata 
+
+echo "Installing ProFTP"
+sudo apt install proftpd-basic -y 
+
+echo "Installing ZIP"
+apt install unzip
+
+#----------- Optimization ------------#
+
+echo "Optimizing php.ini"
+sed -i -r 's/\s*memory_limit\s+=\s+16M/memory_limit = 256M/g' /etc/php/7.2/fpm/php.ini
+sed -i -r 's/\s*UPLOAD_MAX_FILESIZE\s+=\s+16M/UPLOAD_MAX_FILESIZE = 256M/g' /etc/php/7.2/fpm/php.ini
+sed -i -r 's/\s*POST_MAX_SIZE\s+=\s+16M/POST_MAX_SIZE = 256M/g' /etc/php/7.2/fpm/php.ini
+sed -i -r 's/\s*max_execution_time\s+=\s+16M/max_execution_time = 360/g' /etc/php/7.2/fpm/php.ini
+
+#sed -ie 's/memory_limit\ =\ 128M/memory_limit\ =\ 2G/g' /etc/php5/apache2/php.ini
+sed -ie 's/\;date\.timezone\ =/date\.timezone\ =\ Asia\/Kolkata/g' /etc/php/7.2/fpm/php.ini
+#sed -ie 's/upload_max_filesize\ =\ 2M/upload_max_filesize\ =\ 200M/g' /etc/php5/apache2/php.ini
+#sed -ie 's/post_max_size\ =\ 8M/post_max_size\ =\ 200M/g' /etc/php5/apache2/php.ini
+
+
+
+#----------- Permissions ------------#
+
+# Update Permissions
+echo -e '\n[Adjusting Permissions]'
+chgrp -R www-data /var/www/*
+chmod -R g+rw /var/www/*
+sh -c 'find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s'
+
+#----------- Creating all DBs and permissions ------------#
+
+# Execute commands
+mysql  <<ENDOFSQL
+-- Create the database
+CREATE DATABASE seeddms; 
+CREATE DATABASE osticket_db;
+CREATE DATABASE internal;
+CREATE DATABASE moodle;
+CREATE DATABASE osticket_db;
+
+CREATE USER 'dbdmin'@'localhost' IDENTIFIED BY 'sULpXEm3N';
+GRANT ALL PRIVILEGES ON *.* TO 'dbdmin'@'localhost' WITH GRANT OPTION;
+
+--
+-- flush the privileges to disk
+FLUSH PRIVILEGES;
+--
+exit
+ENDOFSQL
+
 
 # Install Git
 sudo apt install git
@@ -39,8 +192,8 @@ cd intranet_apps_lemp
 
 mkdir -p -v /var/www/internal
 # mkdir -p -v /var/www/osticket
-mkdir -p -v /var/www/moodle
-mkdir -p -v /var/www/seeddms
+#mkdir -p -v /var/www/moodle
+#mkdir -p -v /var/www/seeddms
 mkdir -p -v /var/www/itdb
 
 # Move Internal folder to /var/www/internal
@@ -51,15 +204,47 @@ mv internal * /var/www/internal
 
 mysql internal < /var/www/internal/sql.sql
 
-# Install OS Ticket for github
+# Install OSTicket for github
 cd /tmp
 git clone https://github.com/osTicket/osTicket
 cd osTicket
 php manage.php deploy --setup /var/www/osticket/
 
 # Fix OsTicket AJAX issue with NGINX
+wget -O https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/fixes/osticket/class.osticket.php /var/www/osticket/include/class.osticket.php
+
+# Install Moodle for github
+
+cd /var/www/
+git clone git://git.moodle.org/moodle.git
+cd moodle
+git branch -a
+git branch --track MOODLE_38_STABLE origin/MOODLE_38_STABLE
+git checkout MOODLE_38_STABLE
+chmod 0777 /var/www/moodle
+mkdir /var/moodledata
+chmod 0777 /var/moodledata
+
+sudo -u www-data /usr/bin/php /var/www/moodle/admin/cli/install_database.php --adminuser='admin' --adminpass='kFb3DaA4#' --adminemail=it@example.com --fullname="LMS" --shortname="Home"
+
+# Install SeedDMS 
+
+mkdir -p -v /var/www/seeddms && cd /var/www/seeddms
+wget https://liquidtelecom.dl.sourceforge.net/project/seeddms/seeddms-5.1.13/seeddms-quickstart-5.1.13.tar.gz
+sudo tar -xvzf  seeddms-quickstart-5.1.13.tar.gz
+sudo touch /var/www/seeddms/seeddms51x/conf/ENABLE_INSTALL_TOOL
+
+echo -e "INSTALLATION OF SEEDDMS has been done! \n Open your browser, and point it to http://192.10.100.100:83/install/install.php and follow instruction on the screen.\n
+NOTE: on the databse delete the path and enter the db name created in Mariadb.\nREPLACE Content directory and all other feilds with\n/home/www-data/ with /var/www/seeddms\nDatabase Type = mysql"
+
+# Install ITDB
+cd /tmp
+wget https://github.com/sivann/itdb/archive/1.23.zip && unzip 1.23.zip
+cd itdb-1.23
+mv * /var/www/itdb
 
 
+cd /tmp
 # Move NGINX host files to sites Available
 
 mv /tmp/intranet_apps_lemp/nginx_vhosts * /etc/nginx/sites-available
@@ -72,6 +257,11 @@ sudo ln -s /etc/nginx/sites-available/moodle.conf /etc/nginx/sites-enabled/
 sudo ln -s /etc/nginx/sites-available/seeddms.conf /etc/nginx/sites-enabled/
 sudo ln -s /etc/nginx/sites-available/itdb.conf /etc/nginx/sites-enabled/
 
+#FIX Permissions
+sudo chown -R www-data:www-data /var/www/
+sudo chmod -R 755 /var/www/
+sudo chown -R www-data /var/www/moodledata
+sudo chmod -R 0770 /var/www/moodledata
 
 #Remove Default NGINX File
 sudo rm /etc/nginx/sites-available/default
