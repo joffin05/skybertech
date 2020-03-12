@@ -72,56 +72,33 @@ df -h
 
 
 
-
-echo "Adding all repositories"
-echo "NGINX repository adding"
-
-sudo bash -c 'cat > /etc/apt/sources.list.d/nginx.list << EOL
-deb http://nginx.org/packages/ubuntu/ xenial nginx
-deb-src http://nginx.org/packages/ubuntu/ xenial nginx
-EOL'
-echo "NGINX repository added"
-
-echo "Adding Php 7.2 repository"
-
-sudo add-apt-repository ppa:ondrej/php
-
-echo "Adding Php 7.2 repository added"
-
-echo "Adding Mariadb repository"
-
-sudo apt-get install software-properties-common
-sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
-sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.nodesdirect.com/mariadb/repo/10.4/ubuntu bionic main'
-
-echo "added Mariadb repository"
-
 echo "Updating Linux"
-sudo apt-get update
+sudo apt-get update -y
+sudo apt-get upgrade -y
 
 echo "Installing  Nginx"
 
-wget http://nginx.org/keys/nginx_signing.key
-sudo apt-key add nginx_signing.key
-sudo apt-get install nginx
+sudo apt-get install nginx -y
+sudo systemctl start nginx.service
 echo "Installed  Nginx"
 
 echo "Install MariaDB"
 
-sudo apt install mariadb-server
+sudo apt install mariadb-server -y
 
 echo "Install PHP 7.2"
 
-sudo apt-get install php7.2
+sudo apt-get install php -y
+php -v
 
 echo "Install needed modules for PHP"
-sudo apt-get install php7.2-fpm php7.2-json php7.2-opcache php7.2-readline php7.2-mysql php7.2-curl php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip php7.2-gd php7.2-sqlite
-apt install php-{xmlrpc,soap,bcmath,cli,xml,tokenizer,ldap,imap,util,intl,apcu,gettext} openssl
+sudo apt-get install php7.2-fpm php7.2-json php7.2-opcache php7.2-readline php7.2-mysql php7.2-curl php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip php7.2-gd php7.2-sqlite -y
+apt install php-{xmlrpc,soap,bcmath,cli,xml,tokenizer,ldap,imap,util,intl,apcu,gettext} openssl -y
 echo "Done Installing needed modules for PHP"
 
 echo "Installing other required modules"
 
-sudo apt-get install poppler-utils catdoc
+sudo apt-get install poppler-utils catdoc -y
 
 echo "Setting timezone to India"
 timedatectl set-timezone Asia/Kolkata 
@@ -211,7 +188,8 @@ cd osTicket
 php manage.php deploy --setup /var/www/osticket/
 
 # Fix OsTicket AJAX issue with NGINX
-wget -O https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/fixes/osticket/class.osticket.php /var/www/osticket/include/class.osticket.php
+wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/fixes/osticket/class.osticket.php 
+mv class.osticket.php /var/www/osticket/include/class.osticket.php
 
 # Install Moodle for github
 
