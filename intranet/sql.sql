@@ -10,7 +10,7 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+05:30";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -576,12 +576,12 @@ CREATE TABLE IF NOT EXISTS `i_software` (
 --
 
 INSERT INTO `i_software` (`ISoftID`, `ISoftTitle`, `ISoftImage`, `ISoftUrl`, `SortOrder`, `Timestamp`) VALUES
-(1, 'LMS', '1579172263.jpg', 'http://172.24.162.41/moodle', 2, '2020-01-13 17:50:24'),
-(2, 'ESSL', '1578937856.png', 'http://172.24.162.34:2762/iclock/', 5, '2020-01-13 17:50:56'),
-(3, 'HRMS', '1578937914.png', 'https://skybertech.greythr.com/', 1, '2020-01-13 17:51:54'),
-(4, 'Project Management', '1578937944.png', 'https://www.orangescrum.com/', 4, '2020-01-13 17:52:24'),
-(5, 'DMS', '1578937970.png', 'http://172.24.162.40:8087/dms', 6, '2020-01-13 17:52:50'),
-(6, 'Asset Management', '1579869693.png', 'http://172.24.162.42:8088', 3, '2020-01-13 17:53:16');
+(1, 'LMS', '1579172263.jpg', '#', 2, '2020-01-13 17:50:24'),
+(2, 'ESSL', '1578937856.png', '#', 5, '2020-01-13 17:50:56'),
+(3, 'HRMS', '1578937914.png', '#', 1, '2020-01-13 17:51:54'),
+(4, 'Project Management', '1578937944.png', '#', 4, '2020-01-13 17:52:24'),
+(5, 'DMS', '1578937970.png', '#', 6, '2020-01-13 17:52:50'),
+(6, 'Asset Management', '1579869693.png', '#', 3, '2020-01-13 17:53:16');
 
 -- --------------------------------------------------------
 
