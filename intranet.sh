@@ -1,4 +1,4 @@
-#------- Heading ------#
+#------- Heading ------##
 
 #!/bin/bash
 #
@@ -8,7 +8,7 @@
 # Author:   Riyas Rawther
 # URL:      https://github.com/riyas-rawther/
 #
-#wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && ./intranet.sh
+#sudo -i wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && ./intranet.sh
 
 # Styling
 bold=$(tput bold)
@@ -105,7 +105,7 @@ sudo apt install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-com
 php -v
 
 echo "Install needed modules for PHP"
-sudo apt-get install php7.2-fpm php7.2-json php7.2-opcache php7.2-readline php7.2-mysql php7.2-curl php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip php7.2-gd php7.2-sqlite -y
+sudo apt-get install php7.2-fpm php7.2-json php7.2-imap php7.2-Intl php7.2-APCu php7.2-opcache php7.2-readline php7.2-mysql php7.2-curl php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip php7.2-gd php7.2-sqlite -y
 #apt install php-{xmlrpc,soap,bcmath,cli,xml,tokenizer,ldap,imap,util,intl,apcu,gettext} openssl -y
 echo "Done Installing needed modules for PHP"
 
@@ -182,13 +182,13 @@ git config --global user.name "Riyas Rawther"
 git config --global user.email "riyasrawther.in@gmail.com"
 # Download the full folder
 cd /tmp
-https://github.com/riyas-rawther/intranet_apps_lemp.git
+git clone https://github.com/riyas-rawther/intranet_apps_lemp.git
 
-cd intranet_apps_lemp_master
+cd /tmp/intranet_apps_lemp
 
 # Create required folders
 
-mkdir -p -v /var/www/internal
+
 # mkdir -p -v /var/www/osticket
 #mkdir -p -v /var/www/moodle
 #mkdir -p -v /var/www/seeddms
@@ -212,20 +212,23 @@ php manage.php deploy --setup /var/www/osticket/
 wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/fixes/osticket/class.osticket.php 
 mv class.osticket.php /var/www/osticket/include/class.osticket.php
 
+cp /var/www/osticket/include/ost-sampleconfig.php /var/www/osticket/include/ost-config.php
+chmod 0666 /var/www/osticket/include/ost-config.php
+
 # Install Moodle for github
 
 cd /var/www/
 #git clone git://git.moodle.org/moodle.git
-https://github.com/moodle/moodle.git
+git clone https://github.com/moodle/moodle.git
 cd moodle
-git branch -a
+#git branch -a
 git branch --track MOODLE_38_STABLE origin/MOODLE_38_STABLE
 git checkout MOODLE_38_STABLE
 chmod 0777 /var/www/moodle
-mkdir /var/moodledata
+mkdir -p -v /var/moodledata
 chmod 0777 /var/moodledata
 
-sudo -u www-data /usr/bin/php /var/www/moodle/admin/cli/install_database.php --adminuser='admin' --adminpass='kFb3DaA4#' --adminemail=it@example.com --fullname="LMS" --shortname="Home"
+#sudo -u www-data /usr/bin/php /var/www/moodle/admin/cli/install_database.php --adminuser='admin' --adminpass='kFb3DaA4#' --adminemail=it@example.com --fullname="LMS" --shortname="Home"
 
 # Install SeedDMS 
 
@@ -234,20 +237,22 @@ wget https://liquidtelecom.dl.sourceforge.net/project/seeddms/seeddms-5.1.13/see
 sudo tar -xvzf  seeddms-quickstart-5.1.13.tar.gz
 sudo touch /var/www/seeddms/seeddms51x/conf/ENABLE_INSTALL_TOOL
 
-echo -e "INSTALLATION OF SEEDDMS has been done! \n Open your browser, and point it to http://192.10.100.100:83/install/install.php and follow instruction on the screen.\n
-NOTE: on the databse delete the path and enter the db name created in Mariadb.\nREPLACE Content directory and all other feilds with\n/home/www-data/ with /var/www/seeddms\nDatabase Type = mysql"
 
 # Install ITDB
 cd /tmp
 wget https://github.com/sivann/itdb/archive/1.23.zip && unzip 1.23.zip
 cd itdb-1.23
 mv * /var/www/itdb
+cd /var/www/itdb/data; cp pure.db itdb.db
+cd /var/www/itdb/data; chown www-data itdb.db; chmod u+w itdb.db
+chown www-data /var/www/itdb/data; chmod u+w /var/www/itdb/data/
+chown www-data /var/www/itdb/data/files/; chmod u+w /var/www/itdb/data/files/
 
 
-cd /tmp
+/tmp/intranet_apps_lemp/nginx_vhosts
 # Move NGINX host files to sites Available
-
-mv /tmp/intranet_apps_lemp/nginx_vhosts * /etc/nginx/sites-available
+mv phpmyadmin.conf /etc/nginx/snippets/
+mv * /etc/nginx/sites-available
 
 # Create NGINX links
 
@@ -260,13 +265,12 @@ sudo ln -s /etc/nginx/sites-available/itdb.conf /etc/nginx/sites-enabled/
 #FIX Permissions
 sudo chown -R www-data:www-data /var/www/
 sudo chmod -R 755 /var/www/
-sudo chown -R www-data /var/www/moodledata
-sudo chmod -R 0770 /var/www/moodledata
+sudo chown -R www-data /var/moodledata
+sudo chmod -R 0770 /var/moodledata
 
-#Remove Default NGINX File
-sudo rm /etc/nginx/sites-available/default
+
 # test Nginx
-sudo nginx-t
+sudo nginx -t
 # Restart NGINX
 
 sudo systemctl restart nginx.service
