@@ -8,7 +8,7 @@
 # Author:   Riyas Rawther
 # URL:      https://github.com/riyas-rawther/
 #
-#sudo  wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && ./intranet.sh
+#sudo wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && ./intranet.sh
 
 # Styling
 bold=$(tput bold)
@@ -192,12 +192,12 @@ cd /tmp/intranet_apps_lemp
 # mkdir -p -v /var/www/osticket
 #mkdir -p -v /var/www/moodle
 #mkdir -p -v /var/www/seeddms
-mkdir -p -v /var/www/internal
+#mkdir -p -v /var/www/internal
 mkdir -p -v /var/www/itdb
 
 # Move Internal folder to /var/www/internal
-
-mv internal * /var/www/internal
+cd /tmp/intranet_apps_lemp
+mv -v internal/ /var/www/
 
 #Restore Internal DB from Dump
 
@@ -234,7 +234,8 @@ chmod 0777 /var/moodledata
 # Install SeedDMS 
 
 mkdir -p -v /var/www/seeddms && cd /var/www/seeddms
-wget https://liquidtelecom.dl.sourceforge.net/project/seeddms/seeddms-5.1.13/seeddms-quickstart-5.1.13.tar.gz
+#wget https://liquidtelecom.dl.sourceforge.net/project/seeddms/seeddms-5.1.13/seeddms-quickstart-5.1.13.tar.gz
+mv /tmp/intranet_apps_lemp/apps/seeddms-quickstart-5.1.13.tar.gz .
 sudo tar -xvzf  seeddms-quickstart-5.1.13.tar.gz
 sudo touch /var/www/seeddms/seeddms51x/conf/ENABLE_INSTALL_TOOL
 
