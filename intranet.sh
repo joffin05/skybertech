@@ -79,11 +79,11 @@ sudo apt-get upgrade -y
 
 echo "Installing  Nginx"
 
-sudo apt install nginx
+sudo apt install nginx -y
 sudo systemctl enable nginx
 sudo systemctl start nginx.service
 sudo systemctl start nginx
-systemctl status nginx
+#systemctl status nginx
 nginx -v
 sudo chown www-data:www-data /var/www/ -R
 sudo rm /etc/nginx/sites-enabled/default
@@ -92,8 +92,8 @@ echo "Installed  Nginx"
 
 echo "Install MariaDB"
 
-sudo apt install mariadb-server mariadb-client
-systemctl status mariadb
+sudo apt install mariadb-server mariadb-client -y
+#systemctl status mariadb
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
 mariadb --version
@@ -101,7 +101,7 @@ sudo mysql_secure_installation
 
 echo "Install PHP 7.2"
 
-sudo apt install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-mbstring php7.2-xml php7.2-gd php7.2-curl
+sudo apt install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-mbstring php7.2-xml php7.2-gd php7.2-curl -y
 php -v
 
 echo "Install needed modules for PHP"
@@ -111,7 +111,7 @@ echo "Done Installing needed modules for PHP"
 
 sudo systemctl start php7.2-fpm
 sudo systemctl enable php7.2-fpm
-systemctl status php7.2-fpm
+#systemctl status php7.2-fpm
 
 echo "Setting timezone to India"
 timedatectl set-timezone Asia/Kolkata 
@@ -215,7 +215,8 @@ mv class.osticket.php /var/www/osticket/include/class.osticket.php
 # Install Moodle for github
 
 cd /var/www/
-git clone git://git.moodle.org/moodle.git
+#git clone git://git.moodle.org/moodle.git
+https://github.com/moodle/moodle.git
 cd moodle
 git branch -a
 git branch --track MOODLE_38_STABLE origin/MOODLE_38_STABLE
