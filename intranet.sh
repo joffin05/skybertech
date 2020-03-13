@@ -8,6 +8,7 @@
 # Author:   Riyas Rawther
 # URL:      https://github.com/riyas-rawther/
 #
+#wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && ./intranet.sh
 
 # Styling
 bold=$(tput bold)
@@ -78,27 +79,39 @@ sudo apt-get upgrade -y
 
 echo "Installing  Nginx"
 
-sudo apt-get install nginx -y
+sudo apt install nginx
+sudo systemctl enable nginx
 sudo systemctl start nginx.service
+sudo systemctl start nginx
+systemctl status nginx
+nginx -v
+sudo chown www-data:www-data /var/www/ -R
+sudo rm /etc/nginx/sites-enabled/default
+
 echo "Installed  Nginx"
 
 echo "Install MariaDB"
 
-sudo apt install mariadb-server -y
+sudo apt install mariadb-server mariadb-client
+systemctl status mariadb
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+mariadb --version
+sudo mysql_secure_installation
 
 echo "Install PHP 7.2"
 
-sudo apt-get install php -y
+sudo apt install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-mbstring php7.2-xml php7.2-gd php7.2-curl
 php -v
 
 echo "Install needed modules for PHP"
 sudo apt-get install php7.2-fpm php7.2-json php7.2-opcache php7.2-readline php7.2-mysql php7.2-curl php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip php7.2-gd php7.2-sqlite -y
-apt install php-{xmlrpc,soap,bcmath,cli,xml,tokenizer,ldap,imap,util,intl,apcu,gettext} openssl -y
+#apt install php-{xmlrpc,soap,bcmath,cli,xml,tokenizer,ldap,imap,util,intl,apcu,gettext} openssl -y
 echo "Done Installing needed modules for PHP"
 
-echo "Installing other required modules"
-
-sudo apt-get install poppler-utils catdoc -y
+sudo systemctl start php7.2-fpm
+sudo systemctl enable php7.2-fpm
+systemctl status php7.2-fpm
 
 echo "Setting timezone to India"
 timedatectl set-timezone Asia/Kolkata 
@@ -152,6 +165,14 @@ FLUSH PRIVILEGES;
 --
 exit
 ENDOFSQL
+
+#Install phpmyadmin
+
+sudo mkdir -p -v /usr/share/phpmyadmin/
+cd /usr/share/phpmyadmin/
+sudo wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz
+sudo tar xzf phpMyAdmin-5.0.1-all-languages.tar.gz
+sudo mv phpMyAdmin-5.0.1-all-languages/* /usr/share/phpmyadmin
 
 
 # Install Git
