@@ -8,7 +8,7 @@
 # Author:   Riyas Rawther
 # URL:      https://github.com/riyas-rawther/
 #
-#cd /tmp && rm intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && sudo ./intranet.sh
+#cd /tmp && rm -f intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && sudo ./intranet.sh
 
 # Styling
 bold=$(tput bold)
@@ -251,7 +251,7 @@ chown www-data /var/www/itdb/data; chmod u+w /var/www/itdb/data/
 chown www-data /var/www/itdb/data/files/; chmod u+w /var/www/itdb/data/files/
 
 
-/tmp/intranet_apps_lemp/nginx_vhosts
+cd /tmp/intranet_apps_lemp/nginx_vhosts
 # Move NGINX host files to sites Available
 mv phpmyadmin.conf /etc/nginx/snippets/
 mv * /etc/nginx/sites-available
