@@ -163,7 +163,7 @@ git config --global user.email "riyasrawther.in@gmail.com"
 cd /tmp
 https://github.com/riyas-rawther/intranet_apps_lemp.git
 
-cd intranet_apps_lemp
+cd intranet_apps_lemp_master
 
 # Create required folders
 
