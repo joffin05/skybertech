@@ -8,7 +8,7 @@
 # Author:   Riyas Rawther
 # URL:      https://github.com/riyas-rawther/
 #
-#sudo wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && ./intranet.sh
+#cd /tmp && rm intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && sudo ./intranet.sh
 
 # Styling
 bold=$(tput bold)
@@ -194,9 +194,9 @@ cd /tmp/intranet_apps_lemp
 #mkdir -p -v /var/www/seeddms
 #mkdir -p -v /var/www/internal
 mkdir -p -v /var/www/itdb
+rm -rf /var/www/internal/
 
 # Move Internal folder to /var/www/internal
-cd /tmp/intranet_apps_lemp
 mv -v internal/ /var/www/
 
 #Restore Internal DB from Dump
