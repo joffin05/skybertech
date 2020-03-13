@@ -8,7 +8,7 @@
 # Author:   Riyas Rawther
 # URL:      https://github.com/riyas-rawther/
 #
-#sudo -i wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && ./intranet.sh
+#sudo  wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && ./intranet.sh
 
 # Styling
 bold=$(tput bold)
@@ -192,6 +192,7 @@ cd /tmp/intranet_apps_lemp
 # mkdir -p -v /var/www/osticket
 #mkdir -p -v /var/www/moodle
 #mkdir -p -v /var/www/seeddms
+mkdir -p -v /var/www/internal
 mkdir -p -v /var/www/itdb
 
 # Move Internal folder to /var/www/internal
@@ -228,7 +229,7 @@ chmod 0777 /var/www/moodle
 mkdir -p -v /var/moodledata
 chmod 0777 /var/moodledata
 
-#sudo -u www-data /usr/bin/php /var/www/moodle/admin/cli/install_database.php --adminuser='admin' --adminpass='kFb3DaA4#' --adminemail=it@example.com --fullname="LMS" --shortname="Home"
+#sudo -u www-data /usr/bin/php /var/www/moodle/admin/cli/install_database.php --lang=en adminuser='admin' --adminpass='kFb3DaA4#' --adminemail=it@example.com --fullname="LMS" --shortname="Home"
 
 # Install SeedDMS 
 
