@@ -50,8 +50,8 @@ TIMEZONE="Asia/Kolkata"				# Change to your timezone
 echo 'LC_ALL="en_US.UTF-8"' >> /etc/environment
 
 # Install security updates automatically
-echo -e "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\nUnattended-Upgrade::Automatic-Reboot \"false\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
-/etc/init.d/unattended-upgrades restart
+#echo  "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\nUnattended-Upgrade::Automatic-Reboot \"false\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
+#/etc/init.d/unattended-upgrades restart
 
 # Setup simple Firewall
 ufw allow 22 #OpenSSH
@@ -105,7 +105,7 @@ sudo apt install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-com
 php -v
 
 echo "Install needed modules for PHP"
-sudo apt-get install php7.2-fpm php7.2-json php7.2-imap php7.2-Intl php7.2-APCu php7.2-opcache php7.2-readline php7.2-mysql php7.2-curl php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip php7.2-gd php7.2-sqlite -y
+sudo apt-get install php7.2-fpm php7.2-json php7.2-imap php7.2-xmlrpc php7.2-soap php7.2-Intl php7.2-APCu php7.2-opcache php7.2-readline php7.2-mysql php7.2-curl php7.2-bz2 php7.2-mbstring php7.2-xml php7.2-zip php7.2-gd php7.2-sqlite -y
 #apt install php-{xmlrpc,soap,bcmath,cli,xml,tokenizer,ldap,imap,util,intl,apcu,gettext} openssl -y
 echo "Done Installing needed modules for PHP"
 
@@ -150,11 +150,11 @@ sh -c 'find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s'
 # Execute commands
 mysql  <<ENDOFSQL
 -- Create the database
-CREATE DATABASE seeddms; 
-CREATE DATABASE osticket_db;
-CREATE DATABASE internal;
-CREATE DATABASE moodle;
-CREATE DATABASE osticket_db;
+CREATE DATABASE seeddms DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; 
+CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+CREATE DATABASE internal DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+CREATE DATABASE moodle DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 CREATE USER 'dbdmin'@'localhost' IDENTIFIED BY 'sULpXEm3N';
 GRANT ALL PRIVILEGES ON *.* TO 'dbdmin'@'localhost' WITH GRANT OPTION;
