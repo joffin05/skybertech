@@ -8,7 +8,7 @@
 # Author:   Riyas Rawther
 # URL:      https://github.com/riyas-rawther/
 #
-#cd /tmp && rm -f intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 755 intranet.sh && sudo ./intranet.sh
+#cd /tmp && rm -f intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 0700 intranet.sh && sudo bash intranet.sh
 
 # Styling
 bold=$(tput bold)
@@ -31,14 +31,23 @@ echo -e "*"
 echo -e "****************************************************************"
 echo
 
-# Confirm setup
-read -p "${bold}Do you want to Proceed? [y/N]${normal} " -n 1 -r
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-  echo
-  echo -e "Exiting..."
-  echo
-  echo
-  exit 1
+# Check OS support
+distr=`echo $(lsb_release -i | cut -d':' -f 2)`
+osver=`echo $(lsb_release -c | cut -d':' -f 2)`
+if ! [[ $distr == "Ubuntu" && $osver =~ ^(xenial|bionic)$ ]]; then
+	echo "$(tput setaf 1)"
+	echo "****************************************************************************"
+	echo "****  This OS is not supported by Webinoly and could not work properly  ****"
+	echo "****************************************************************************"
+	echo "$(tput sgr0)"
+	read -p "Press [Enter] key to Continue or [Ctrl+C] to Cancel..."
+fi
+
+# Check for sudo/root privileges
+if [[ $(whoami) != "root" ]]; then
+	echo "$(tput setaf 1)Please run this script as root or using sudo.$(tput sgr0)"
+	sudo rm weby
+	exit 1
 fi
 
 ### SETTINGS ->
@@ -123,12 +132,21 @@ echo "Installing ZIP"
 apt install unzip
 
 #----------- Optimization ------------#
+echo "Some php.ini Tweaks"
+sleep 2;
+sudo sed -i "s/post_max_size = .*/post_max_size = 200M/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/memory_limit = .*/memory_limit = 300M/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 512M/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/max_execution_time = .*/max_execution_time = 18000/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/; max_input_vars = .*/max_input_vars = 10000/" /etc/php/7.2/fpm/php.ini
+sudo systemctl restart php7.2-fpm.service
 
-echo "Optimizing php.ini"
-sed -i -r 's/\s*memory_limit\s+=\s+16M/memory_limit = 256M/g' /etc/php/7.2/fpm/php.ini
-sed -i -r 's/\s*UPLOAD_MAX_FILESIZE\s+=\s+16M/UPLOAD_MAX_FILESIZE = 256M/g' /etc/php/7.2/fpm/php.ini
-sed -i -r 's/\s*POST_MAX_SIZE\s+=\s+16M/POST_MAX_SIZE = 256M/g' /etc/php/7.2/fpm/php.ini
-sed -i -r 's/\s*max_execution_time\s+=\s+16M/max_execution_time = 360/g' /etc/php/7.2/fpm/php.ini
+
+#echo "Optimizing php.ini"
+#sed -i -r 's/\s*memory_limit\s+=\s+16M/memory_limit = 256M/g' /etc/php/7.2/fpm/php.ini
+#sed -i -r 's/\s*UPLOAD_MAX_FILESIZE\s+=\s+16M/UPLOAD_MAX_FILESIZE = 256M/g' /etc/php/7.2/fpm/php.ini
+#sed -i -r 's/\s*POST_MAX_SIZE\s+=\s+16M/POST_MAX_SIZE = 256M/g' /etc/php/7.2/fpm/php.ini
+#sed -i -r 's/\s*max_execution_time\s+=\s+16M/max_execution_time = 360/g' /etc/php/7.2/fpm/php.ini
 
 #sed -ie 's/memory_limit\ =\ 128M/memory_limit\ =\ 2G/g' /etc/php5/apache2/php.ini
 sed -ie 's/\;date\.timezone\ =/date\.timezone\ =\ Asia\/Kolkata/g' /etc/php/7.2/fpm/php.ini
@@ -146,25 +164,17 @@ chmod -R g+rw /var/www/*
 sh -c 'find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s'
 
 #----------- Creating all DBs and permissions ------------#
-
-# Execute commands
-mysql  <<ENDOFSQL
--- Create the database
+sudo mysql <<MYSQL_SCRIPT
 CREATE DATABASE seeddms DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; 
 CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 CREATE DATABASE internal DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 CREATE DATABASE moodle DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-
 CREATE USER 'dbdmin'@'localhost' IDENTIFIED BY 'sULpXEm3N';
 GRANT ALL PRIVILEGES ON *.* TO 'dbdmin'@'localhost' WITH GRANT OPTION;
-
---
--- flush the privileges to disk
 FLUSH PRIVILEGES;
---
-exit
-ENDOFSQL
+MYSQL_SCRIPT
+
 
 #Install phpmyadmin
 
@@ -186,6 +196,8 @@ git clone https://github.com/riyas-rawther/intranet_apps_lemp.git
 
 cd /tmp/intranet_apps_lemp
 
+sudo cp -p fixes/my.cnf /etc/mysql/my.cnf
+service mysql restart
 # Create required folders
 
 
