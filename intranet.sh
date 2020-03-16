@@ -10,45 +10,7 @@
 #
 #cd /tmp && rm -f intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 0700 intranet.sh && sudo bash intranet.sh
 
-# Styling
-bold=$(tput bold)
-normal=$(tput sgr0)
-fontwhite="\033[1;37m"
-fontgreen="\033[0;32m"
 
-# App details
-DIRECTORY=
-DOMAIN=
-IP= hostname -I
-
-echo
-echo -e "****************************************************************"
-echo -e "*"
-echo -e "* Setting up Nginx Server Block:"
-echo -e "*   Domain: ${fontgreen}${bold}${DOMAIN}${normal}"
-echo -e "*   Directory: ${fontgreen}${bold}${DIRECTORY}${normal}"
-echo -e "*"
-echo -e "****************************************************************"
-echo
-
-# Check OS support
-distr=`echo $(lsb_release -i | cut -d':' -f 2)`
-osver=`echo $(lsb_release -c | cut -d':' -f 2)`
-if ! [[ $distr == "Ubuntu" && $osver =~ ^(xenial|bionic)$ ]]; then
-	echo "$(tput setaf 1)"
-	echo "****************************************************************************"
-	echo "****  This OS is not supported by Webinoly and could not work properly  ****"
-	echo "****************************************************************************"
-	echo "$(tput sgr0)"
-	read -p "Press [Enter] key to Continue or [Ctrl+C] to Cancel..."
-fi
-
-# Check for sudo/root privileges
-if [[ $(whoami) != "root" ]]; then
-	echo "$(tput setaf 1)Please run this script as root or using sudo.$(tput sgr0)"
-	sudo rm weby
-	exit 1
-fi
 
 ### SETTINGS ->
 #KEY="ssh-rsa ABC123== you@email.com"	# Please, place below your public key!
