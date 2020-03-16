@@ -14,7 +14,7 @@
 
 ### SETTINGS ->
 #KEY="ssh-rsa ABC123== you@email.com"	# Please, place below your public key!
-TIMEZONE="Asia/Kolkata"				# Change to your timezone
+#TIMEZONE="Asia/Kolkata"				# Change to your timezone
 ### <- SETTINGS
 
 # Fix environment
