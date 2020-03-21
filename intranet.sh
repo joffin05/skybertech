@@ -126,16 +126,18 @@ chmod -R g+rw /var/www/*
 sh -c 'find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s'
 
 #----------- Creating all DBs and permissions ------------#
-sudo mysql <<MYSQL_SCRIPT
+sudo mysql 
 CREATE DATABASE seeddms DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; 
 CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 CREATE DATABASE internal DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 CREATE DATABASE moodle DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-CREATE USER 'dbdmin'@'localhost' IDENTIFIED BY 'sULpXEm3N';
-GRANT ALL PRIVILEGES ON *.* TO 'dbdmin'@'localhost' WITH GRANT OPTION;
+CREATE USER 'dbadmin'@'localhost' IDENTIFIED BY 'sULpXEm3N';
+GRANT ALL PRIVILEGES ON *.* TO 'dbadmin'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
-MYSQL_SCRIPT
+exit;
+
+
 
 
 #Install phpmyadmin

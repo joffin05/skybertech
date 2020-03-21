@@ -42,7 +42,7 @@ include 'header.php';
     <h4 style="background:#EEEEEE">
     
 
-
+    <!-- <p class="marquee"> </p> -->
     
     <marquee onmouseover="this.stop();" onmouseout="this.start();">
     <?php 
@@ -50,7 +50,7 @@ include 'header.php';
     while($Row_news = $Result_news->fetch_assoc())
     { ?>
 
-    <a href="news-details.php?n-id=<?php echo $Row_news['INewsID']; ?>"><span><?php echo $Row_news['INTitle']; ?> &nbsp;&nbsp;&nbsp;&nbsp; <span></a>
+    <a href="news-details.php?n-id=<?php echo $Row_news['INewsID']; ?>"><span style="text-transform: none"><?php echo $Row_news['INTitle']; ?> &nbsp;&nbsp;&nbsp;&nbsp; <span></a>
 
     <?php } ?>
    </marquee>
