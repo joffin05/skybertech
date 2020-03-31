@@ -21,8 +21,8 @@
 echo 'LC_ALL="en_US.UTF-8"' >> /etc/environment
 
 # Install security updates automatically
-echo  "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\nUnattended-Upgrade::Automatic-Reboot \"false\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
-/etc/init.d/unattended-upgrades restart
+#echo  "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\nUnattended-Upgrade::Automatic-Reboot \"false\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
+#/etc/init.d/unattended-upgrades restart
 
 # Setup simple Firewall
 ufw allow 22 #OpenSSH
