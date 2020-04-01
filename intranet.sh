@@ -25,6 +25,8 @@ echo 'LC_ALL="en_US.UTF-8"' >> /etc/environment
 #/etc/init.d/unattended-upgrades restart
 
 # Setup simple Firewall
+ufw allow 20 #ftp
+ufw allow 21 #ftp
 ufw allow 22 #OpenSSH
 ufw allow 80 #http
 ufw allow 81 #http
