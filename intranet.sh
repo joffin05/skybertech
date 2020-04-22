@@ -1,5 +1,6 @@
 #------- Heading ------##
 
+#Author: riyas
 #!/bin/bash
 #
 # Setup server block in Nginx
