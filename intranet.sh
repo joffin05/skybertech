@@ -1,12 +1,13 @@
 #------- Heading ------##
 
-#Author: riyas rawther
+
 #!/bin/bash
 #
 # Setup server block in Nginx
 #
 # GitHub:   https://github.com/riyas-rawther/intranet_apps_lemp
 # Author:   Riyas Rawther
+# Email:   	riyasrawther.in@gmail.com
 # URL:      https://github.com/riyas-rawther/
 #
 #cd /tmp && rm -f intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 0700 intranet.sh && sudo bash intranet.sh
