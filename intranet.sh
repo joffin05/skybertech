@@ -148,9 +148,9 @@ exit;
 
 sudo mkdir -p -v /usr/share/phpmyadmin/
 cd /usr/share/phpmyadmin/
-sudo wget https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz
-sudo tar xzf phpMyAdmin-5.0.1-all-languages.tar.gz
-sudo mv phpMyAdmin-5.0.1-all-languages/* /usr/share/phpmyadmin
+sudo wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.tar.gz
+sudo tar xzf phpMyAdmin-5.0.2-all-languages.tar.gz
+sudo mv phpMyAdmin-5.0.2-all-languages/* /usr/share/phpmyadmin
 
 
 # Install Git
