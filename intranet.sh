@@ -129,17 +129,36 @@ chgrp -R www-data /var/www/*
 chmod -R g+rw /var/www/*
 sh -c 'find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s'
 
-#----------- Creating all DBs and permissions ------------#
-sudo mysql 
+
+
+#!/bin/bash
+PASS=sULpXEm3N
+
+mysql -uroot <<MYSQL_SCRIPT
 CREATE DATABASE seeddms DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; 
-CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-CREATE DATABASE internal DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-CREATE DATABASE moodle DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-CREATE USER 'dbadmin'@'localhost' IDENTIFIED BY 'sULpXEm3N';
+CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; 
+CREATE DATABASE internal DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; 
+CREATE DATABASE moodle DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; 
+ALTER DATABASE moodle DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+CREATE USER 'dbadmin'@'localhost' IDENTIFIED BY '$PASS';
 GRANT ALL PRIVILEGES ON *.* TO 'dbadmin'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
-exit;
+MYSQL_SCRIPT
+
+echo "MySQL user created."
+echo "Username:   $1"
+echo "Password:   $PASS"
+
+#----------- Creating all DBs and permissions ------------#
+#sudo mysql 
+#CREATE DATABASE seeddms DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; 
+#CREATE DATABASE osticket_db DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+#CREATE DATABASE internal DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+#CREATE DATABASE moodle DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+#CREATE USER 'dbadmin'@'localhost' IDENTIFIED BY 'sULpXEm3N';
+#GRANT ALL PRIVILEGES ON *.* TO 'dbadmin'@'localhost' WITH GRANT OPTION;
+#FLUSH PRIVILEGES;
+#exit;
 
 
 
