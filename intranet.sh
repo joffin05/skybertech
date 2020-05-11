@@ -9,7 +9,19 @@
 #
 #cd /tmp && rm -f intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 0700 intranet.sh && sudo bash intranet.sh
 
+#--- Display the 'welcome' splash/user warning info..
+echo ""
+echo "#############################################################################"
+echo "#  This Installer Only for Ubuntu 18.04, otherwise will not support.          #"
+echo "#  Make sure this server is fresh install.                                  #"
+echo "#  For more information, please contact riyasrawther.in@gmail.com           #"
+echo "#############################################################################"
+sleep 5
 
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root use sudo -i " 1>&2
+   exit 1
+fi
 
 ### SETTINGS ->
 #KEY="ssh-rsa ABC123== you@email.com"	# Please, place below your public key!
@@ -152,7 +164,6 @@ sh -c 'find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s'
 
 
 
-#!/bin/bash
 PASS=sULpXEm3N
 
 mysql -uroot <<MYSQL_SCRIPT
