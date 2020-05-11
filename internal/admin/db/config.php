@@ -1,5 +1,5 @@
 <?php
-$conn = mysqli_connect("localhost","dbdmin","sULpXEm3N","internal");
+$conn = mysqli_connect("localhost","dbadmin","sULpXEm3N","internal");
 //localhost username password db_name
 
 // Check connection

@@ -1,6 +1,3 @@
-#------- Heading ------##
-
-
 #!/bin/bash
 #
 # Setup server block in Nginx
@@ -21,6 +18,7 @@
 
 # Fix environment
 echo 'LC_ALL="en_US.UTF-8"' >> /etc/environment
+sleep 1
 
 # Install security updates automatically
 #echo  "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\nUnattended-Upgrade::Automatic-Reboot \"false\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
@@ -45,16 +43,36 @@ ufw status
 # See disk space
 df -h
 #------- Heading END ------#
+sudo killall apt apt-get
+sudo lsof /var/lib/dpkg/lock
+sleep 1
+sudo lsof /var/lib/apt/lists/lock
+sleep 1
+sudo lsof /var/cache/apt/archives/lock
+sleep 1
+sudo rm /var/lib/apt/lists/lock
+sleep 1
+sudo rm /var/cache/apt/archives/lock
+sleep 1
+sudo rm /var/lib/dpkg/lock
+sleep 3
+sudo fuser -cuk /var/cache/apt/archives/lock; sudo rm -f /var/cache/apt/archives/lock
 
+# Update the repository location to US 
+curl https://repogen.simplylinux.ch/txt/bionic/sources_5d6f82baa5992eae0ab833bb6689d1d08908e8a7.txt | sudo tee /etc/apt/sources.list
 
 
 echo "Updating Linux"
 sudo apt-get update -y
+sleep 1
 sudo apt-get upgrade -y
 
 echo "Installing  Nginx"
 
-sudo apt install nginx -y
+sudo apt-get install nginx -y
+sleep 3
+nginx -v
+sleep 3
 sudo systemctl enable nginx
 sudo systemctl start nginx.service
 sudo systemctl start nginx
@@ -64,6 +82,9 @@ sudo chown www-data:www-data /var/www/ -R
 sudo rm /etc/nginx/sites-enabled/default
 
 echo "Installed  Nginx"
+
+sudo apt-get install -y unzip
+
 
 echo "Install MariaDB"
 
@@ -76,7 +97,7 @@ sudo mysql_secure_installation
 
 echo "Install PHP 7.2"
 
-sudo apt install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-mbstring php7.2-xml php7.2-gd php7.2-curl -y
+sudo apt-get install php7.2 php7.2-fpm php7.2-mysql php-common php7.2-cli php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-mbstring php7.2-xml php7.2-gd php7.2-curl -y
 php -v
 
 echo "Install needed modules for PHP"
@@ -92,10 +113,10 @@ echo "Setting timezone to India"
 timedatectl set-timezone Asia/Kolkata 
 
 echo "Installing ProFTP"
-sudo apt install proftpd-basic -y 
+sudo apt-get install proftpd-basic -y 
 
-echo "Installing ZIP"
-apt install unzip
+#echo "Installing ZIP"
+#apt install unzip -y 
 
 #----------- Optimization ------------#
 echo "Some php.ini Tweaks"
@@ -173,7 +194,7 @@ sudo mv phpMyAdmin-5.0.2-all-languages/* /usr/share/phpmyadmin
 
 
 # Install Git
-sudo apt install git
+sudo apt-get install git
 git --version
 git config --global user.name "Riyas Rawther"
 git config --global user.email "riyasrawther.in@gmail.com"
