@@ -9,19 +9,7 @@
 #
 #cd /tmp && rm -f intranet.sh && wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/intranet.sh && chmod 0700 intranet.sh && sudo bash intranet.sh
 
-#--- Display the 'welcome' splash/user warning info..
-echo ""
-echo "#############################################################################"
-echo "#  This Installer Only for Ubuntu 18.04, otherwise will not support.          #"
-echo "#  Make sure this server is fresh install.                                  #"
-echo "#  For more information, please contact riyasrawther.in@gmail.com           #"
-echo "#############################################################################"
-sleep 5
 
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root use sudo -i " 1>&2
-   exit 1
-fi
 
 ### SETTINGS ->
 #KEY="ssh-rsa ABC123== you@email.com"	# Please, place below your public key!
@@ -73,6 +61,10 @@ sudo fuser -cuk /var/cache/apt/archives/lock; sudo rm -f /var/cache/apt/archives
 # Update the repository location to US 
 curl https://repogen.simplylinux.ch/txt/bionic/sources_5d6f82baa5992eae0ab833bb6689d1d08908e8a7.txt | sudo tee /etc/apt/sources.list
 
+# MariaDB Preperation
+sudo apt-get install software-properties-common -y
+sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.kku.ac.th/mariadb/repo/10.4/ubuntu bionic main'
 
 echo "Updating Linux"
 sudo apt-get update -y
@@ -164,6 +156,7 @@ sh -c 'find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s'
 
 
 
+#!/bin/bash
 PASS=sULpXEm3N
 
 mysql -uroot <<MYSQL_SCRIPT
@@ -301,9 +294,40 @@ sudo chmod -R 755 /var/www/
 sudo chown -R www-data /var/moodledata
 sudo chmod -R 0770 /var/moodledata
 
+#Cleanups
+rm /var/www/seeddms/seeddms-quickstart-5.1.13.tar.gz
+
 
 # test Nginx
 sudo nginx -t
 # Restart NGINX
 
 sudo systemctl restart nginx.service
+
+# output
+local_ip=$(ip addr show | awk '$1 == "inet" && $3 == "brd" { sub (/\/.*/,""); print $2 }')
+
+echo ""
+echo "##################################"
+echo "The following applications has been installed"
+echo "NGINX - Webserver"
+echo "MariaDB - Mysql Server#"
+echo "PhpMyadmin#"
+echo "Php 7.2"
+echo "						"
+echo "Internal Portal at port 80#"
+echo "OsTicket at  port 81"
+echo "Moodle at Port 82"
+echo "SeedDMS at Port 83"
+echo "ITDB at Port 84"
+echo "						"
+echo "**********************************"
+echo "To install the SeedDMS 	visit http://$local_ip:83/install/install.php"
+echo "***********************************"
+echo "						"
+echo "Mysql Username is dbadmin"
+echo "Mysql Password is sULpXEm3N"
+echo "##"
+echo "For support contact riyasrawther.in@gmail.com"
+echo "##################################"
+sleep 5
