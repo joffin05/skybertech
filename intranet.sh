@@ -1,10 +1,10 @@
 #!/bin/bash
 # wget https://raw.githubusercontent.com/skybertech/intrranet/master/intranet.sh && chmod +x intranet.sh && bash intranet.sh\
 
-# GitHub:   https://github.com/riyas-rawther/intranet_apps_lemp
-# Author:   Riyas Rawther
-# Email:   	riyasrawther.in@gmail.com
-# URL:      https://github.com/riyas-rawther/
+# GitHub:   https://github.com/joffin05/skybertech
+# Author:   Joffin Johnson
+# Email:   	joffin005@gmail.com
+# URL:      https://github.com/joffin05/
 #
 
 
@@ -199,8 +199,8 @@ sudo mv phpMyAdmin-5.0.2-all-languages/* /usr/share/phpmyadmin
 # Install Git
 sudo apt-get install git
 git --version
-git config --global user.name "Riyas Rawther"
-git config --global user.email "riyasrawther.in@gmail.com"
+git config --global user.name "Joffin05"
+git config --global user.email "joffin005@gmail.com"
 # Download the full folder
 cd /tmp
 git clone https://github.com/riyas-rawther/intranet_apps_lemp.git
@@ -233,7 +233,7 @@ cd osTicket
 php manage.php deploy --setup /var/www/osticket/
 
 # Fix OsTicket AJAX issue with NGINX
-wget https://raw.githubusercontent.com/riyas-rawther/intranet_apps_lemp/master/fixes/osticket/class.osticket.php 
+wget https://github.com/joffin05/skybertech/master/fixes/osticket/class.osticket.php 
 mv class.osticket.php /var/www/osticket/include/class.osticket.php
 
 cp /var/www/osticket/include/ost-sampleconfig.php /var/www/osticket/include/ost-config.php
