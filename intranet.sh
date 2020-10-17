@@ -203,9 +203,9 @@ git config --global user.name "Joffin05"
 git config --global user.email "joffin005@gmail.com"
 # Download the full folder
 cd /tmp
-git clone https://github.com/riyas-rawther/intranet_apps_lemp.git
+git clone https://github.com/joffin05/skybertech.git
 
-cd /tmp/intranet_apps_lemp
+cd /tmp/skybertech
 
 sudo cp -p fixes/my.cnf /etc/mysql/my.cnf
 service mysql restart
@@ -233,7 +233,7 @@ cd osTicket
 php manage.php deploy --setup /var/www/osticket/
 
 # Fix OsTicket AJAX issue with NGINX
-wget https://github.com/joffin05/skybertech/master/fixes/osticket/class.osticket.php 
+wget https://github.com/joffin05/skybertech/blob/master/fixes/osticket/class.osticket.php
 mv class.osticket.php /var/www/osticket/include/class.osticket.php
 
 cp /var/www/osticket/include/ost-sampleconfig.php /var/www/osticket/include/ost-config.php
@@ -327,6 +327,6 @@ echo "						"
 echo "Mysql Username is dbadmin"
 echo "Mysql Password is sULpXEm3N"
 echo "##"
-echo "For support contact riyasrawther.in@gmail.com"
+echo "For support contact joffin005@gmail.com"
 echo "##################################"
 sleep 5
