@@ -1,5 +1,5 @@
 #!/bin/bash
-# wget https://raw.githubusercontent.com/skybertech/intrranet/master/intranet.sh && chmod +x intranet.sh && bash intranet.sh\
+# wget https://github.com/joffin05/skybertech/edit/master/intranet.sh && chmod +x intranet.sh && bash intranet.sh\
 
 # GitHub:   https://github.com/joffin05/skybertech
 # Author:   Joffin Johnson
