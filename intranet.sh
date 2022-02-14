@@ -233,7 +233,7 @@ cd osTicket
 php manage.php deploy --setup /var/www/osticket/
 
 # Fix OsTicket AJAX issue with NGINX
-wget https://github.com/joffin05/skybertech/blob/master/fixes/osticket/class.osticket.php
+wget https://raw.githubusercontent.com/joffin05/skybertech/master/fixes/osticket/class.osticket.php
 mv class.osticket.php /var/www/osticket/include/class.osticket.php
 
 cp /var/www/osticket/include/ost-sampleconfig.php /var/www/osticket/include/ost-config.php
